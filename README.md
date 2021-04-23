@@ -12,7 +12,7 @@
 
 3. Удалить лишнее:
 
-	`rm -rf "./.git/" "./CHANGELOG.md" "./package-lock.json"`
+	`rm -rf "./.git/" "./package-lock.json"`
 
 	`find . -type f -name ".gitkeep" -delete`
 
