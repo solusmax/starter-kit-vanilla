@@ -1,0 +1,83 @@
+// [1] Change the box model to "border-box"
+
+*,
+*::before,
+*::after {
+  // [1]
+  box-sizing: border-box;
+}
+
+// *****************************************************************************
+
+// [1] Image will scale down if it has to, but never scale up to be larger
+//     than the window or the container in which it resides
+
+img {
+  // [1]
+  max-width: 100%;
+  height: auto;
+}
+
+// *****************************************************************************
+
+// https://github.com/WICG/focus-visible
+//
+// [1] Hide the focus indicator if the element receives focus via
+//     the mouse, but it will still show up on keyboard focus
+//
+// [2] The focus indicator for keyboard focus
+
+.js-focus-visible :focus:not(.focus-visible) {
+  // [1]
+  outline: none;
+}
+
+.js-focus-visible .focus-visible,
+:not(.js-focus-visible) :focus {
+  // [2]
+  @include focus-default-styles;
+}
+
+// *****************************************************************************
+
+// [1] Remove inner shadow and rounded corners (iOS)
+//
+// [2] Remove red shadow (Firefox)
+
+[type="text"],
+[type="email"],
+[type="tel"],
+[type="password"],
+[type="search"],
+[type="number"],
+textarea {
+  // [1]
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+
+  background: none;
+  box-shadow: none;
+
+  &:invalid {
+    // [2]
+    box-shadow: none;
+  }
+}
+
+:-moz-ui-invalid {
+  // [2]
+  box-shadow: none;
+}
+
+// *****************************************************************************
+
+// [1] Remove the cross (Chrome)
+
+[type="search"]::-webkit-search-decoration,
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-results-button,
+[type="search"]::-webkit-search-results-decoration {
+  // [1]
+  display: none;
+}

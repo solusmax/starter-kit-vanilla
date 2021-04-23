@@ -1,0 +1,21 @@
+{
+  "syntax": "scss",
+  "extends": [
+    "stylelint-config-recommended"
+  ],
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": null,
+    "color-named": "never",
+    "font-weight-notation": "numeric",
+    "declaration-no-important": true,
+    "length-zero-no-unit": true,
+    "no-descending-specificity": null,
+    "no-extra-semicolons": null,
+    "selector-max-id": 0,
+    "shorthand-property-no-redundant-values": true
+  }
+}

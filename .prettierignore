@@ -1,0 +1,4 @@
+.sow/
+.vscode/
+build/
+node_modules/
