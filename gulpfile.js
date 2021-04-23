@@ -64,6 +64,7 @@ const BuildPaths = {
   FAVICON: `${BUILD_PATH}`
 };
 
+const CSS_BUNDLE_FILENAME = 'style.min.css';
 const JS_BUNDLE_FILENAME = 'script.min.js';
 const SVG_SPRITE_FILENAME = 'sprite.svg';
 
@@ -140,7 +141,7 @@ const buildCss = () => {
     .pipe(gulpIf(isProductionMode, postcss([
       cssnano()
     ])))
-    .pipe(rename('style.min.css'))
+    .pipe(rename(CSS_BUNDLE_FILENAME))
     .pipe(dest(`${BuildPaths.CSS}`, { sourcemaps: '.' }));
 };
 
