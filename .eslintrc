@@ -8,7 +8,7 @@
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:editorconfig/all"
+    "plugin:editorconfig/noconflict"
   ],
   "rules": {
     "array-bracket-spacing": ["error", "never"],
@@ -26,6 +26,7 @@
     "func-call-spacing": "error",
     "generator-star-spacing": ["error", "after"],
     "guard-for-in": "error",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "key-spacing": "error",
     "keyword-spacing": "error",
     "max-nested-callbacks": ["error", { "max": 3 }],
@@ -81,7 +82,6 @@
     "space-in-parens": ["error", "never"],
     "space-infix-ops": "error",
     "space-unary-ops": ["error", { "words": true, "nonwords": false }],
-    "spaced-comment": "error",
     "yield-star-spacing": ["error", "after"],
     "yoda": "error"
   }
