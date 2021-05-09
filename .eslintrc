@@ -1,7 +1,12 @@
 {
   "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
   "env": {
-    "browser": true
+    "browser": true,
+    "es2017": true
   },
   "plugins": [
     "editorconfig"
@@ -48,7 +53,6 @@
     "no-multi-spaces": "error",
     "no-multi-str": "error",
     "no-multiple-empty-lines": "error",
-    "no-nested-ternary": "error",
     "no-new": "error",
     "no-new-func": "error",
     "no-new-object": "error",
