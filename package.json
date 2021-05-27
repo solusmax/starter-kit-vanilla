@@ -37,7 +37,6 @@
     "gulp-svgstore": "^7.0.1",
     "gulp-webp": "^4.0.1",
     "htmlhint": "^0.14.2",
-    "js-beautify": "^1.13.13",
     "node-sass-magic-importer": "^5.3.2",
     "postcss": "^8.2.15",
     "postcss-inline-svg": "^5.0.0",
