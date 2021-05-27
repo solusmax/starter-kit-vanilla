@@ -6,19 +6,18 @@ const browserSync      = require('browser-sync').create();
 const cssnano          = require('cssnano');
 const del              = require('del');
 const Fiber            = require('fibers');
+const fileinclude      = require('gulp-file-include');
 const ghPages          = require('gh-pages');
 const gulpIf           = require('gulp-if');
 const gulpWebpack      = require('webpack-stream');
 const htmlmin          = require('gulp-htmlmin');
 const imagemin         = require('gulp-imagemin');
-const include          = require('posthtml-include');
 const inlineSvg        = require('postcss-inline-svg');
 const magicImporter    = require('node-sass-magic-importer');
 const newer            = require('gulp-newer');
 const plumber          = require('gulp-plumber');
 const postcss          = require('gulp-postcss');
 const postcssNormalize = require('postcss-normalize');
-const posthtml         = require('gulp-posthtml');
 const rename           = require('gulp-rename');
 const sass             = require('gulp-sass');
       sass.compiler    = require('sass');
@@ -106,9 +105,10 @@ const publishGhPages = (cb) => {
 
 const buildHtml = () => {
   return src(SrcFiles.HTML)
-    .pipe(posthtml([
-      include()
-    ]))
+    .pipe(fileinclude({
+      prefix: '@@',
+      basepath: '@root'
+    }))
     .pipe(htmlmin({
       caseSensitive: true,
       collapseWhitespace: true,
