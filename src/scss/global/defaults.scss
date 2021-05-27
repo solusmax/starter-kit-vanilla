@@ -33,7 +33,8 @@ img {
 }
 
 .js-focus-visible .focus-visible,
-:not(.js-focus-visible) :focus {
+:focus-visible,
+.no-js :focus {
   // [2]
   @include focus-default-styles;
 }
