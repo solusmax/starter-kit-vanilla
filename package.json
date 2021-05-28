@@ -7,7 +7,7 @@
     "build:dev": "gulp buildDev",
     "deploy:gh-pages": "gulp deployGhPages",
     "test": "npm run test:html && npm run test:css && npm run test:js",
-    "test:html": "js-beautify \"./src/html/**/*.html\" --editorconfig && htmlhint \"./src/html/**/*.html\"",
+    "test:html": "htmlhint \"./src/html/**/*.html\"",
     "test:css": "prettier --write \"./src/scss/**/*.scss\" && stylelint \"./src/scss/**/*.scss\" --syntax scss",
     "test:js": "eslint \"src/js/\""
   },
