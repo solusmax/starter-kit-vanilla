@@ -5,7 +5,6 @@ const autoprefixer     = require('autoprefixer');
 const browserSync      = require('browser-sync').create();
 const cssnano          = require('cssnano');
 const del              = require('del');
-const Fiber            = require('fibers');
 const fileinclude      = require('gulp-file-include');
 const ghPages          = require('gh-pages');
 const gulpIf           = require('gulp-if');
@@ -19,8 +18,7 @@ const plumber          = require('gulp-plumber');
 const postcss          = require('gulp-postcss');
 const postcssNormalize = require('postcss-normalize');
 const rename           = require('gulp-rename');
-const sass             = require('gulp-sass');
-      sass.compiler    = require('sass');
+const sass             = require('gulp-sass')(require('sass'));
 const svgstore         = require('gulp-svgstore');
 const webp             = require('gulp-webp');
 const webpack          = require('webpack');
@@ -126,7 +124,6 @@ const buildCss = () => {
   return src(SCSS_ENTRY_POINT, { sourcemaps: !isProductionMode })
     .pipe(gulpIf(!isProductionMode, plumber()))
     .pipe(sass({
-      fiber: Fiber,
       importer: magicImporter()
     }).on('error', sass.logError))
     .pipe(postcss([
