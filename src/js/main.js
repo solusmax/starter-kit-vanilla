@@ -1,4 +1,4 @@
 import 'focus-visible';
-import { enableJs } from './util';
+import { enableJs } from './utils';
 
 enableJs();
