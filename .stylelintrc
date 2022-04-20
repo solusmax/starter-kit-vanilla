@@ -1,7 +1,7 @@
 {
   "syntax": "scss",
   "extends": [
-    "stylelint-config-recommended"
+    "stylelint-config-recommended-scss"
   ],
   "plugins": [
     "stylelint-scss"
@@ -9,6 +9,7 @@
   "rules": {
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": null,
+    "scss/comment-no-empty": null,
     "color-named": "never",
     "font-weight-notation": "numeric",
     "declaration-no-important": true,
