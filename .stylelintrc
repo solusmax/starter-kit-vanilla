@@ -8,6 +8,7 @@
   ],
   "rules": {
     "at-rule-no-unknown": null,
+    "scss/at-import-partial-extension": null,
     "scss/at-rule-no-unknown": null,
     "scss/comment-no-empty": null,
     "color-named": "never",
