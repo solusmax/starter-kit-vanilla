@@ -3,7 +3,7 @@
   "license": "WTFPL",
   "scripts": {
     "start": "gulp",
-    "build": "gulp buildProd",
+    "build:prod": "gulp buildProd",
     "build:dev": "gulp buildDev",
     "deploy:gh-pages": "gulp deployGhPages",
     "test": "npm run test:html && npm run test:css && npm run test:js",
