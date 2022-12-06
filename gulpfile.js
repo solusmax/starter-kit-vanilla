@@ -45,9 +45,9 @@ const SrcFiles = {
   SCSS: [`${SrcPaths.SCSS}/**/*.scss`],
   JS: [`${SrcPaths.JS}/**/*.js`],
   IMG: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png,gif,svg}`],
-  WEBP: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png}`],
+  IMG_TO_WEBP: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png}`],
   SVG: [`${SrcPaths.IMG}/**/*.svg`],
-  SVG_SPRITE: [`${SrcPaths.IMG}/**/icon-*.svg`],
+  SVG_TO_SPRITE: [`${SrcPaths.IMG}/**/icon-*.svg`],
   FONTS: [`${SrcPaths.FONTS}/**/*`],
   FAVICON: [`${SrcPaths.FAVICON}/**/*`]
 }
@@ -201,7 +201,7 @@ exports.buildImg = series(buildImg);
 // WebP
 
 const buildWebp = () => {
-  return src(SrcFiles.WEBP, { base: `${SrcPaths.IMG}` })
+  return src(SrcFiles.IMG_TO_WEBP, { base: `${SrcPaths.IMG}` })
     .pipe(gulpIf(!isProductionMode, plumber()))
     .pipe(webp({
       quality: 90
@@ -214,7 +214,7 @@ exports.buildWebp = series(buildWebp);
 // SVG-спрайт
 
 const buildSvgSprite = () => {
-  return src(SrcFiles.SVG_SPRITE)
+  return src(SrcFiles.SVG_TO_SPRITE)
     .pipe(imagemin([
       imagemin.svgo({
         plugins: [{
@@ -273,7 +273,7 @@ const startServer = () => {
   // Вотчеры
 
   watch(
-    [...SrcFiles.HTML, ...SrcFiles.SVG_SPRITE],
+    [...SrcFiles.HTML, ...SrcFiles.SVG_TO_SPRITE],
     series(buildSvgSprite, buildHtml, reloadPage)
   );
 
@@ -293,7 +293,7 @@ const startServer = () => {
   );
 
   watch(
-    SrcFiles.WEBP,
+    SrcFiles.IMG_TO_WEBP,
     series(buildWebp, reloadPage)
   );
 
@@ -312,7 +312,7 @@ const startServer = () => {
 
 // Задачи
 
-const build = series(
+const buildDev = series(
   clearBuildForlder,
   parallel(
     series(buildSvgSprite, buildHtml),
@@ -324,11 +324,11 @@ const build = series(
     buildFavicon
   )
 );
-const buildProd = series(enableProductionMode, build);
-const startDev = series(build, startServer);
+const buildProd = series(enableProductionMode, buildDev);
+const startDev = series(buildDev, startServer);
 const deployGhPages = series(buildProd, publishGhPages);
 
 exports.default = startDev;
 exports.buildProd = buildProd;
-exports.buildDev = build;
+exports.buildDev = buildDev;
 exports.deployGhPages = deployGhPages;
