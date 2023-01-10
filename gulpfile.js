@@ -41,7 +41,7 @@ const SCSS_ENTRY_POINT = `${SrcPaths.SCSS}/style.scss`;
 const JS_ENTRY_POINT = `./${SrcPaths.JS}/main.js`;
 
 const SrcFiles = {
-  HTML: [`${SrcPaths.HTML}/**/*.html`],
+  HTML: [`${SrcPaths.HTML}/**/*.html`, `!${SrcPaths.HTML}/includes/**/*.html`],
   SCSS: [`${SrcPaths.SCSS}/**/*.scss`],
   JS: [`${SrcPaths.JS}/**/*.js`],
   IMG: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png,gif,svg}`],
@@ -309,8 +309,6 @@ const startServer = () => {
 };
 
 // ********************************** ЗАДАЧИ ***********************************
-
-// Задачи
 
 const buildDev = series(
   clearBuildForlder,
