@@ -45,7 +45,7 @@
     "stylelint": "^15.2.0",
     "stylelint-config-recommended-scss": "^9.0.1",
     "stylelint-scss": "^4.5.0",
-    "webpack": "^5.76.1",
+    "webpack": "^5.76.2",
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
