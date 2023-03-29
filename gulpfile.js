@@ -23,7 +23,7 @@ const svgstore         = require('gulp-svgstore');
 const webp             = require('gulp-webp');
 const webpack          = require('webpack');
 
-// **************************** ФАЙЛОВАЯ СТРУКТУРА *****************************
+// ****************************** FILE STRUCTURE *******************************
 
 const SRC_PATH = './src';
 const BUILD_PATH = './build';
@@ -65,25 +65,25 @@ const CSS_BUNDLE_FILENAME = 'style.min.css';
 const JS_BUNDLE_FILENAME = 'script.min.js';
 const SVG_SPRITE_FILENAME = 'sprite.svg';
 
-// ************************* ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ***************************
+// **************************** UTILITY FUNCTIONS ******************************
 
 let isProductionMode = false;
 
-// Включение режима продакшена
+// Turning on production mode
 
 const enableProductionMode = (cb) => {
   isProductionMode = true;
   cb();
 };
 
-// Перезагрузка страницы в браузере
+// Refreshing the page
 
 const reloadPage = (cb) => {
   browserSync.reload();
   cb();
 };
 
-// Удаление папки build
+// Deleting the build folder
 
 const clearBuildForlder = () => {
   return del(`${BUILD_PATH}`, {
@@ -91,13 +91,13 @@ const clearBuildForlder = () => {
   });
 };
 
-// Публикация на GitHub Pages
+// Publishing on GitHub Pages
 
 const publishGhPages = (cb) => {
   ghPages.publish(`${BUILD_PATH}/`, cb);
 }
 
-// ******************************** СБОРКА *************************************
+// ********************************* BUILD *************************************
 
 // HTML
 
@@ -176,7 +176,7 @@ const buildJs = () => {
 
 exports.buildJs = series(buildJs);
 
-// Изображения
+// Images
 
 const buildImg = () => {
   return src(SrcFiles.IMG, { base: `${SrcPaths.IMG}` })
@@ -211,7 +211,7 @@ const buildWebp = () => {
 
 exports.buildWebp = series(buildWebp);
 
-// SVG-спрайт
+// SVG sprite
 
 const buildSvgSprite = () => {
   return src(SrcFiles.SVG_TO_SPRITE)
@@ -231,7 +231,7 @@ const buildSvgSprite = () => {
 
 exports.buildSvgSprite = series(buildSvgSprite);
 
-// Шрифты
+// Fonts
 
 const buildFonts = () => {
   return src(SrcFiles.FONTS)
@@ -240,7 +240,7 @@ const buildFonts = () => {
 
 exports.buildFonts = series(buildFonts);
 
-// Фавиконки
+// Favicons
 
 const buildFavicon = () => {
   return src(SrcFiles.FAVICON)
@@ -255,7 +255,7 @@ const buildFavicon = () => {
 
 exports.buildFavicon = series(buildFavicon);
 
-// ***************************** ЛОКАЛЬНЫЙ СЕРВЕР ******************************
+// ******************************* LOCAL SERVER ********************************
 
 const startServer = () => {
   browserSync.init({
@@ -270,7 +270,7 @@ const startServer = () => {
     }
   });
 
-  // Вотчеры
+  // Watchers
 
   watch(
     [...SrcFiles.HTML, ...SrcFiles.SVG_TO_SPRITE],
@@ -308,7 +308,7 @@ const startServer = () => {
   );
 };
 
-// ********************************** ЗАДАЧИ ***********************************
+// *********************************** TASKS ***********************************
 
 const buildDev = series(
   clearBuildForlder,

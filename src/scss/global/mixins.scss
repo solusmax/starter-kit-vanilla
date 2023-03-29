@@ -1,4 +1,4 @@
-// outline при фокусе
+// "outline" when element has received focus
 
 @mixin focus-default-styles {
   outline-width: 2px;
@@ -12,7 +12,7 @@
   outline-offset: $outline-offset;
 }
 
-// Доступное скрытие
+// Accessible hiding
 
 @mixin visually-hidden {
   position: absolute;
@@ -31,7 +31,7 @@
   clip-path: inset(100%);
 }
 
-// Отмена доступного скрытия
+// Cancel accessible hiding
 
 @mixin visually-unhidden {
   position: static;
