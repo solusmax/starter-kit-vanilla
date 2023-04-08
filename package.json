@@ -20,7 +20,7 @@
     "browser-sync": "^2.29.1",
     "cssnano": "^6.0.0",
     "del": "6.0.0",
-    "eslint": "^8.37.0",
+    "eslint": "^8.38.0",
     "eslint-plugin-editorconfig": "^4.0.2",
     "gh-pages": "^5.0.0",
     "gulp": "^4.0.2",
