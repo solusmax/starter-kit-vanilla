@@ -41,11 +41,11 @@
     "postcss-inline-svg": "^6.0.0",
     "postcss-scss": "^4.0.6",
     "prettier": "^2.8.8",
-    "sass": "^1.62.1",
-    "stylelint": "^15.6.3",
+    "sass": "^1.63.2",
+    "stylelint": "^15.7.0",
     "stylelint-config-recommended-scss": "^12.0.0",
-    "stylelint-scss": "^5.0.0",
-    "webpack": "^5.85.0",
+    "stylelint-scss": "^5.0.1",
+    "webpack": "^5.86.0",
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
