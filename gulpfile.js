@@ -69,29 +69,21 @@ const SVG_SPRITE_FILENAME = 'sprite.svg';
 
 let isProductionMode = false;
 
-// Turning on production mode
-
 const enableProductionMode = (cb) => {
   isProductionMode = true;
   cb();
 };
-
-// Refreshing the page
 
 const reloadPage = (cb) => {
   browserSync.reload();
   cb();
 };
 
-// Deleting the build folder
-
 const clearBuildForlder = () => {
   return del(`${BUILD_PATH}`, {
     force: true
   });
 };
-
-// Publishing on GitHub Pages
 
 const publishGhPages = (cb) => {
   ghPages.publish(`${BUILD_PATH}/`, cb);
