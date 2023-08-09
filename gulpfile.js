@@ -79,7 +79,7 @@ const reloadPage = (cb) => {
   cb();
 };
 
-const clearBuildForlder = () => {
+const clearBuildFolder = () => {
   return del(`${BUILD_PATH}`, {
     force: true
   });
@@ -307,7 +307,7 @@ const startServer = () => {
 // *********************************** TASKS ***********************************
 
 const buildDev = series(
-  clearBuildForlder,
+  clearBuildFolder,
   parallel(
     series(buildSvgSprite, buildHtml),
     buildCss,
