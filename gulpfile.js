@@ -141,6 +141,9 @@ exports.buildCss = series(buildCss);
 const buildJs = () => {
   return src(JS_ENTRY_POINT, { sourcemaps: !isProductionMode })
     .pipe(gulpIf(!isProductionMode, plumber()))
+
+    // Webpack config
+
     .pipe(gulpWebpack({
       mode: isProductionMode ? 'production' : 'development',
       entry: JS_ENTRY_POINT,
@@ -163,6 +166,7 @@ const buildJs = () => {
         ]
       }
     }, webpack))
+
     .pipe(dest(`${BuildPaths.JS}`, { sourcemaps: '.' }));
 };
 
