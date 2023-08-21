@@ -17,6 +17,9 @@ import newer from 'gulp-newer';
 import plumber from 'gulp-plumber';
 import postcss from 'gulp-postcss';
 import rename from 'gulp-rename';
+import rev from 'gulp-rev';
+import revRewrite from 'gulp-rev-rewrite';
+import revDel from 'gulp-rev-delete-original';
 import svgstore from 'gulp-svgstore';
 import webp from 'gulp-webp';
 import webpack from 'webpack';
@@ -91,7 +94,19 @@ const publishGhPages = (cb) => {
   publish(`${BUILD_PATH}/`, cb);
 }
 
-// ********************************* BUILD *************************************
+const bustCache = () => {
+  return src([
+    `${BuildPaths.CSS}/${CSS_BUNDLE_FILENAME}`,
+    `${BuildPaths.JS}/${JS_BUNDLE_FILENAME}`
+  ], { base: BUILD_PATH })
+  .pipe(rev())
+  .pipe(revDel())
+  .pipe(src(`${BuildPaths.HTML}/**/*.html`))
+  .pipe(revRewrite())
+  .pipe(dest(BuildPaths.HTML));
+}
+
+// ********************************* BUILDERS **********************************
 
 // HTML
 
@@ -314,19 +329,19 @@ const startServer = () => {
 
 // *********************************** TASKS ***********************************
 
-const buildDev = series(
-  clearBuildFolder,
-  parallel(
-    series(buildSvgSprite, buildHtml),
-    buildCss,
-    buildJs,
-    buildImg,
-    buildWebp,
-    buildFonts,
-    buildFavicon
-  )
-);
-const buildProd = series(enableProductionMode, buildDev);
+
+const builders = [
+  series(buildSvgSprite, buildHtml),
+  buildCss,
+  buildJs,
+  buildImg,
+  buildWebp,
+  buildFonts,
+  buildFavicon
+];
+
+const buildDev = series(clearBuildFolder, parallel(...builders));
+const buildProd = series(enableProductionMode, clearBuildFolder, parallel(...builders), bustCache);
 const startDev = series(buildDev, startServer);
 const deployGhPages = series(buildProd, publishGhPages);
 
