@@ -5,7 +5,10 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local("Korataki"), local("Korataki Regular"), local("Korataki-Regular"),
+  src:
+    local("Korataki"),
+    local("Korataki Regular"),
+    local("Korataki-Regular"),
     url("#{$fonts}/korataki-regular.woff2") format("woff2"),
     url("#{$fonts}/korataki-regular.woff") format("woff");
 }
