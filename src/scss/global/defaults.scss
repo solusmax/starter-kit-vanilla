@@ -1,13 +1,10 @@
 // [1] Change the box model to "border-box"
-
 *,
 *::before,
 *::after {
   // [1]
   box-sizing: border-box;
 }
-
-// *****************************************************************************
 
 // [1] Image will scale down if it has to, but never scale up to be larger
 //     than the window or the container in which it resides
@@ -18,13 +15,9 @@ img {
   height: auto;
 }
 
-// *****************************************************************************
-
 // https://github.com/WICG/focus-visible
-//
 // [1] Hide the focus indicator if the element receives focus via
 //     the mouse, but it will still show up on keyboard focus
-//
 // [2] The focus indicator for keyboard focus
 
 .js-focus-visible :focus:not(.focus-visible) {
@@ -39,11 +32,118 @@ img {
   @include focus-default-styles;
 }
 
-// *****************************************************************************
+// [1] Add the correct height in Firefox
+// [2] Correct the inheritance of border color in Firefox
 
-// [1] Remove inner shadow and rounded corners (iOS)
-//
-// [2] Remove red shadow (Firefox)
+hr {
+  // [1]
+  height: 0;
+  // [2]
+  color: inherit;
+}
+
+// [1] Add the correct text decoration in Chrome, Edge, and Safari
+
+abbr[title] {
+  // [1]
+  text-decoration: underline dotted;
+}
+
+// [1] Add the correct font weight in Edge and Safari
+
+b,
+strong {
+  // [1]
+  // stylelint-disable-next-line
+  font-weight: bolder;
+}
+
+// [1] Correct the odd 'em' font sizing in all browsers
+
+code,
+kbd,
+samp,
+pre {
+  // [1]
+  font-size: 1em;
+}
+
+// [1] Add the correct font size in all browsers
+
+small {
+  // [1]
+  font-size: 80%;
+}
+
+// [1] Prevent 'sub' and 'sup' elements from affecting
+//     the line height in all browsers
+
+sub,
+sup {
+  // [1]
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  // [1]
+  bottom: -0.25em;
+}
+
+sup {
+  // [1]
+  top: -0.5em;
+}
+
+// [1] Remove text indentation from table contents in Chrome and Safari
+// [2] Correct table border color inheritance in Chrome and Safari
+
+table {
+  // [1]
+  text-indent: 0;
+  // [2]
+  border-color: inherit;
+}
+
+// [1] Change the font styles in all browsers
+// [2] Remove the margin in Firefox and Safari
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  // [1]
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  // [2]
+  margin: 0;
+}
+
+// [1] Remove the inheritance of text transform in Edge and Firefox
+
+button,
+select {
+  // [1]
+  text-transform: none;
+}
+
+// [1] Correct the inability to style clickable types in iOS and Safari
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  // [1]
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+// [1] Remove inner shadow and rounded corners in iOS
+// [2] Remove red shadow in Firefox
 
 [type="text"],
 [type="email"],
@@ -53,11 +153,7 @@ img {
 [type="number"],
 textarea {
   // [1]
-  -webkit-appearance: none;
-  appearance: none;
   border-radius: 0;
-
-  background: none;
   box-shadow: none;
 
   &:invalid {
@@ -66,14 +162,23 @@ textarea {
   }
 }
 
+// [1] Correct the odd appearance in Chrome and Safari
+// [2] Correct the outline style in Safari
+
+[type="search"] {
+  // [1]
+  -webkit-appearance: textfield;
+  appearance: textfield;
+  // [2]
+  outline-offset: -2px;
+}
+
 :-moz-ui-invalid {
   // [2]
   box-shadow: none;
 }
 
-// *****************************************************************************
-
-// [1] Remove the cross (Chrome)
+// [1] Remove the cross in Chrome
 
 [type="search"]::-webkit-search-decoration,
 [type="search"]::-webkit-search-cancel-button,
@@ -81,4 +186,66 @@ textarea {
 [type="search"]::-webkit-search-results-decoration {
   // [1]
   display: none;
+}
+
+// [1] Remove the inner border and padding in Firefox
+
+::-moz-focus-inner {
+  // [1]
+  border-style: none;
+  padding: 0;
+}
+
+// [1] Restore the focus styles unset by the previous rule
+
+:-moz-focusring {
+  // [1]
+  outline: 1px dotted ButtonText;
+}
+
+// [1] Remove the padding so developers are not caught out when
+//     they zero out 'fieldset' elements in all browsers
+
+legend {
+  // [1]
+  padding: 0;
+}
+
+// [1] Add the correct vertical alignment in Chrome and Firefox
+
+progress {
+  // [1]
+  vertical-align: baseline;
+}
+
+// [1] Correct the cursor style of increment and decrement buttons in Safari
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  // [1]
+  height: auto;
+}
+
+// [1] Remove the inner padding in Chrome and Safari on macOS
+
+::-webkit-search-decoration {
+  // [1]
+  -webkit-appearance: none;
+}
+
+// [1] Correct the inability to style clickable types in iOS and Safari
+// [2] Change font properties to 'inherit' in Safari
+
+::-webkit-file-upload-button {
+  // [1]
+  -webkit-appearance: button;
+  // [2]
+  font: inherit;
+}
+
+// [1] Add the correct display in Chrome and Safari
+
+summary {
+  // [1]
+  display: list-item;
 }

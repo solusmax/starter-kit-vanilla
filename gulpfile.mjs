@@ -1,27 +1,29 @@
-'use strict';
+import { deleteAsync } from 'del';
+import { publish } from 'gh-pages';
+import * as dartSass from 'sass';
+import autoprefixer from 'autoprefixer';
+import browserSync from 'browser-sync';
+import cssnano from 'cssnano';
+import fileinclude from 'gulp-file-include';
+import gulp from 'gulp';
+import gulpIf from 'gulp-if';
+import gulpSass from 'gulp-sass';
+import gulpWebpack from 'webpack-stream';
+import htmlmin from 'gulp-htmlmin';
+import imagemin, { mozjpeg, optipng, svgo, gifsicle } from 'gulp-imagemin';
+import inlineSvg from 'postcss-inline-svg';
+import magicImporter from 'node-sass-magic-importer';
+import newer from 'gulp-newer';
+import plumber from 'gulp-plumber';
+import postcss from 'gulp-postcss';
+import rename from 'gulp-rename';
+import svgstore from 'gulp-svgstore';
+import webp from 'gulp-webp';
+import webpack from 'webpack';
 
-const { series, parallel, src, dest, watch } = require('gulp');
-const autoprefixer     = require('autoprefixer');
-const browserSync      = require('browser-sync').create();
-const cssnano          = require('cssnano');
-const del              = require('del');
-const fileinclude      = require('gulp-file-include');
-const ghPages          = require('gh-pages');
-const gulpIf           = require('gulp-if');
-const gulpWebpack      = require('webpack-stream');
-const htmlmin          = require('gulp-htmlmin');
-const imagemin         = require('gulp-imagemin');
-const inlineSvg        = require('postcss-inline-svg');
-const magicImporter    = require('node-sass-magic-importer');
-const newer            = require('gulp-newer');
-const plumber          = require('gulp-plumber');
-const postcss          = require('gulp-postcss');
-const postcssNormalize = require('postcss-normalize');
-const rename           = require('gulp-rename');
-const sass             = require('gulp-sass')(require('sass'));
-const svgstore         = require('gulp-svgstore');
-const webp             = require('gulp-webp');
-const webpack          = require('webpack');
+const { series, parallel, src, dest, watch } = gulp;
+const sass = gulpSass(dartSass);
+const server = browserSync.create();
 
 // ****************************** FILE STRUCTURE *******************************
 
@@ -75,18 +77,18 @@ const enableProductionMode = (cb) => {
 };
 
 const reloadPage = (cb) => {
-  browserSync.reload();
+  server.reload();
   cb();
 };
 
 const clearBuildFolder = () => {
-  return del(`${BUILD_PATH}`, {
+  return deleteAsync(`${BUILD_PATH}`, {
     force: true
   });
 };
 
 const publishGhPages = (cb) => {
-  ghPages.publish(`${BUILD_PATH}/`, cb);
+  publish(`${BUILD_PATH}/`, cb);
 }
 
 // ********************************* BUILD *************************************
@@ -108,7 +110,8 @@ const buildHtml = () => {
     .pipe(dest(`${BuildPaths.HTML}`));
 }
 
-exports.buildHtml = series(buildHtml);
+const _buildHtml = series(buildHtml);
+export { _buildHtml as buildHtml };
 
 // CSS
 
@@ -122,9 +125,6 @@ const buildCss = () => {
       inlineSvg({
         paths: ['.']
       }),
-      postcssNormalize({
-        forceImport: 'normalize.css'
-      }),
       autoprefixer()
     ]))
     .pipe(gulpIf(isProductionMode, postcss([
@@ -134,7 +134,8 @@ const buildCss = () => {
     .pipe(dest(`${BuildPaths.CSS}`, { sourcemaps: '.' }));
 };
 
-exports.buildCss = series(buildCss);
+const _buildCss = series(buildCss);
+export { _buildCss as buildCss };
 
 // JS
 
@@ -170,7 +171,8 @@ const buildJs = () => {
     .pipe(dest(`${BuildPaths.JS}`, { sourcemaps: '.' }));
 };
 
-exports.buildJs = series(buildJs);
+const _buildJs = series(buildJs);
+export { _buildJs as buildJs };
 
 // Images
 
@@ -179,20 +181,21 @@ const buildImg = () => {
     .pipe(gulpIf(!isProductionMode, plumber()))
     .pipe(gulpIf(!isProductionMode, newer(`${BuildPaths.IMG}`)))
     .pipe(gulpIf(isProductionMode, imagemin([
-      imagemin.mozjpeg({
+      mozjpeg({
         quality: 90,
         progressive: true
       }),
-      imagemin.optipng({
+      optipng({
         optimizationLevel: 3
       }),
-      imagemin.svgo(),
-      imagemin.gifsicle()
+      svgo(),
+      gifsicle()
     ])))
     .pipe(dest(`${BuildPaths.IMG}`));
 };
 
-exports.buildImg = series(buildImg);
+const _buildImg = series(buildImg);
+export { _buildImg as buildImg };
 
 // WebP
 
@@ -205,16 +208,18 @@ const buildWebp = () => {
     .pipe(dest(`${BuildPaths.IMG}`));
 };
 
-exports.buildWebp = series(buildWebp);
+const _buildWebp = series(buildWebp);
+export { _buildWebp as buildWebp };
 
 // SVG sprite
 
 const buildSvgSprite = () => {
   return src(SrcFiles.SVG_TO_SPRITE)
     .pipe(imagemin([
-      imagemin.svgo({
-        plugins: [{
-          cleanupIDs: true
+      svgo({
+        plugins: [			{
+          name: 'cleanupIDs',
+          active: true
         }]
       })
     ]))
@@ -225,7 +230,8 @@ const buildSvgSprite = () => {
     .pipe(dest(`${BuildPaths.IMG}`));
 }
 
-exports.buildSvgSprite = series(buildSvgSprite);
+const _buildSvgSprite = series(buildSvgSprite);
+export { _buildSvgSprite as buildSvgSprite };
 
 // Fonts
 
@@ -234,27 +240,29 @@ const buildFonts = () => {
     .pipe(dest(`${BuildPaths.FONTS}`));
 };
 
-exports.buildFonts = series(buildFonts);
+const _buildFonts = series(buildFonts);
+export { _buildFonts as buildFonts };
 
 // Favicons
 
 const buildFavicon = () => {
   return src(SrcFiles.FAVICON)
     .pipe(gulpIf(isProductionMode, imagemin([
-      imagemin.optipng({
+      optipng({
         optimizationLevel: 3
       }),
-      imagemin.svgo()
+      svgo()
     ])))
     .pipe(dest(`${BuildPaths.FAVICON}`));
 };
 
-exports.buildFavicon = series(buildFavicon);
+const _buildFavicon = series(buildFavicon);
+export { _buildFavicon as buildFavicon };
 
 // ******************************* LOCAL SERVER ********************************
 
 const startServer = () => {
-  browserSync.init({
+  server.init({
     server: `${BUILD_PATH}`,
     cors: true,
     notify: false,
@@ -322,7 +330,14 @@ const buildProd = series(enableProductionMode, buildDev);
 const startDev = series(buildDev, startServer);
 const deployGhPages = series(buildProd, publishGhPages);
 
-exports.default = startDev;
-exports.buildProd = buildProd;
-exports.buildDev = buildDev;
-exports.deployGhPages = deployGhPages;
+const _default = startDev;
+export { _default as default };
+
+const _buildProd = buildProd;
+export { _buildProd as buildProd };
+
+const _buildDev = buildDev;
+export { _buildDev as buildDev };
+
+const _deployGhPages = deployGhPages;
+export { _deployGhPages as deployGhPages };
