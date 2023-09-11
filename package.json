@@ -12,7 +12,7 @@
     "test:js": "eslint \"src/js/\""
   },
   "devDependencies": {
-    "@babel/core": "^7.22.15",
+    "@babel/core": "^7.22.17",
     "@babel/eslint-parser": "^7.22.15",
     "@babel/preset-env": "^7.22.15",
     "autoprefixer": "^10.4.15",
@@ -20,7 +20,7 @@
     "browser-sync": "^2.29.3",
     "cssnano": "^6.0.1",
     "del": "7.1.0",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "eslint-plugin-editorconfig": "^4.0.3",
     "gh-pages": "^6.0.0",
     "gulp": "^4.0.2",
@@ -42,7 +42,7 @@
     "node-sass-magic-importer": "^5.3.3",
     "postcss": "^8.4.29",
     "postcss-inline-svg": "^6.0.0",
-    "postcss-scss": "^4.0.7",
+    "postcss-scss": "^4.0.8",
     "prettier": "3.0.3",
     "sass": "^1.66.1",
     "stylelint": "^15.10.3",
