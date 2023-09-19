@@ -40,7 +40,7 @@
     "gulp-webp": "^4.0.1",
     "htmlhint": "^1.1.4",
     "node-sass-magic-importer": "^5.3.3",
-    "postcss": "^8.4.29",
+    "postcss": "^8.4.30",
     "postcss-inline-svg": "^6.0.0",
     "postcss-scss": "^4.0.8",
     "prettier": "3.0.3",
