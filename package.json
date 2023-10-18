@@ -6,10 +6,10 @@
     "build:prod": "gulp buildProd",
     "build:dev": "gulp buildDev",
     "deploy:gh-pages": "gulp deployGhPages",
-    "test": "npm run test:html && npm run test:css && npm run test:js",
-    "test:html": "htmlhint \"./src/html/**/*.html\"",
-    "test:css": "prettier --write \"./src/scss/**/*.scss\" && stylelint \"./src/scss/**/*.scss\" --custom-syntax postcss-scss",
-    "test:js": "prettier --write \"./src/**/*.{js,jsx,ts,tsx}\" && eslint \"src/js/\""
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "lint:html": "htmlhint \"./src/html/**/*.html\"",
+    "lint:css": "prettier --write \"./src/scss/**/*.scss\" && stylelint \"./src/scss/**/*.scss\" --custom-syntax postcss-scss",
+    "lint:js": "prettier --write \"./src/**/*.{js,jsx,ts,tsx}\" && eslint \"src/js/\""
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
