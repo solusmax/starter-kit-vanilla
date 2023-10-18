@@ -39,7 +39,7 @@ const SrcPaths = {
   JS: `${SRC_PATH}/js`,
   IMG: `${SRC_PATH}/img`,
   FONTS: `${SRC_PATH}/fonts`,
-  FAVICON: `${SRC_PATH}/favicon`
+  FAVICON: `${SRC_PATH}/favicon`,
 };
 
 const SCSS_ENTRY_POINT = `${SrcPaths.SCSS}/style.scss`;
@@ -54,8 +54,8 @@ const SrcFiles = {
   SVG: [`${SrcPaths.IMG}/**/*.svg`],
   SVG_TO_SPRITE: [`${SrcPaths.IMG}/**/icon-*.svg`],
   FONTS: [`${SrcPaths.FONTS}/**/*`],
-  FAVICON: [`${SrcPaths.FAVICON}/**/*`]
-}
+  FAVICON: [`${SrcPaths.FAVICON}/**/*`],
+};
 
 const BuildPaths = {
   HTML: `${BUILD_PATH}`,
@@ -63,7 +63,7 @@ const BuildPaths = {
   JS: `${BUILD_PATH}/js`,
   IMG: `${BUILD_PATH}/img`,
   FONTS: `${BUILD_PATH}/fonts`,
-  FAVICON: `${BUILD_PATH}`
+  FAVICON: `${BUILD_PATH}`,
 };
 
 const CSS_BUNDLE_FILENAME = 'style.min.css';
@@ -86,25 +86,28 @@ const reloadPage = (cb) => {
 
 const clearBuildFolder = () => {
   return deleteAsync(`${BUILD_PATH}`, {
-    force: true
+    force: true,
   });
 };
 
 const publishGhPages = (cb) => {
   publish(`${BUILD_PATH}/`, cb);
-}
+};
 
 const bustCache = () => {
-  return src([
-    `${BuildPaths.CSS}/${CSS_BUNDLE_FILENAME}`,
-    `${BuildPaths.JS}/${JS_BUNDLE_FILENAME}`
-  ], { base: BUILD_PATH })
-  .pipe(rev())
-  .pipe(revDel())
-  .pipe(src(`${BuildPaths.HTML}/**/*.html`))
-  .pipe(revRewrite())
-  .pipe(dest(BuildPaths.HTML));
-}
+  return src(
+    [
+      `${BuildPaths.CSS}/${CSS_BUNDLE_FILENAME}`,
+      `${BuildPaths.JS}/${JS_BUNDLE_FILENAME}`,
+    ],
+    { base: BUILD_PATH },
+  )
+    .pipe(rev())
+    .pipe(revDel())
+    .pipe(src(`${BuildPaths.HTML}/**/*.html`))
+    .pipe(revRewrite())
+    .pipe(dest(BuildPaths.HTML));
+};
 
 // ********************************* BUILDERS **********************************
 
@@ -112,18 +115,22 @@ const bustCache = () => {
 
 const buildHtml = () => {
   return src(SrcFiles.HTML)
-    .pipe(fileinclude({
-      prefix: '@@',
-      basepath: '@root'
-    }))
-    .pipe(htmlmin({
-      caseSensitive: true,
-      collapseWhitespace: true,
-      conservativeCollapse: true,
-      removeComments: true
-    }))
+    .pipe(
+      fileinclude({
+        prefix: '@@',
+        basepath: '@root',
+      }),
+    )
+    .pipe(
+      htmlmin({
+        caseSensitive: true,
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        removeComments: true,
+      }),
+    )
     .pipe(dest(`${BuildPaths.HTML}`));
-}
+};
 
 const _buildHtml = series(buildHtml);
 export { _buildHtml as buildHtml };
@@ -133,18 +140,20 @@ export { _buildHtml as buildHtml };
 const buildCss = () => {
   return src(SCSS_ENTRY_POINT, { sourcemaps: !isProductionMode })
     .pipe(gulpIf(!isProductionMode, plumber()))
-    .pipe(sass({
-      importer: magicImporter()
-    }).on('error', sass.logError))
-    .pipe(postcss([
-      inlineSvg({
-        paths: ['.']
-      }),
-      autoprefixer()
-    ]))
-    .pipe(gulpIf(isProductionMode, postcss([
-      cssnano()
-    ])))
+    .pipe(
+      sass({
+        importer: magicImporter(),
+      }).on('error', sass.logError),
+    )
+    .pipe(
+      postcss([
+        inlineSvg({
+          paths: ['.'],
+        }),
+        autoprefixer(),
+      ]),
+    )
+    .pipe(gulpIf(isProductionMode, postcss([cssnano()])))
     .pipe(rename(CSS_BUNDLE_FILENAME))
     .pipe(dest(`${BuildPaths.CSS}`, { sourcemaps: '.' }));
 };
@@ -155,35 +164,42 @@ export { _buildCss as buildCss };
 // JS
 
 const buildJs = () => {
-  return src(JS_ENTRY_POINT, { sourcemaps: !isProductionMode })
-    .pipe(gulpIf(!isProductionMode, plumber()))
+  return (
+    src(JS_ENTRY_POINT, { sourcemaps: !isProductionMode })
+      .pipe(gulpIf(!isProductionMode, plumber()))
 
-    // Webpack config
+      // Webpack config
 
-    .pipe(gulpWebpack({
-      mode: isProductionMode ? 'production' : 'development',
-      entry: JS_ENTRY_POINT,
-      output: {
-        filename: JS_BUNDLE_FILENAME,
-      },
-      devtool: isProductionMode ? false : 'source-map',
-      module: {
-        rules: [
+      .pipe(
+        gulpWebpack(
           {
-            test: /\.(js)$/,
-            exclude: /(node_modules)/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-env']
-              }
-            }
-          }
-        ]
-      }
-    }, webpack))
+            mode: isProductionMode ? 'production' : 'development',
+            entry: JS_ENTRY_POINT,
+            output: {
+              filename: JS_BUNDLE_FILENAME,
+            },
+            devtool: isProductionMode ? false : 'source-map',
+            module: {
+              rules: [
+                {
+                  test: /\.(js)$/,
+                  exclude: /(node_modules)/,
+                  use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env'],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          webpack,
+        ),
+      )
 
-    .pipe(dest(`${BuildPaths.JS}`, { sourcemaps: '.' }));
+      .pipe(dest(`${BuildPaths.JS}`, { sourcemaps: '.' }))
+  );
 };
 
 const _buildJs = series(buildJs);
@@ -195,17 +211,22 @@ const buildImg = () => {
   return src(SrcFiles.IMG, { base: `${SrcPaths.IMG}` })
     .pipe(gulpIf(!isProductionMode, plumber()))
     .pipe(gulpIf(!isProductionMode, newer(`${BuildPaths.IMG}`)))
-    .pipe(gulpIf(isProductionMode, imagemin([
-      mozjpeg({
-        quality: 90,
-        progressive: true
-      }),
-      optipng({
-        optimizationLevel: 3
-      }),
-      svgo(),
-      gifsicle()
-    ])))
+    .pipe(
+      gulpIf(
+        isProductionMode,
+        imagemin([
+          mozjpeg({
+            quality: 90,
+            progressive: true,
+          }),
+          optipng({
+            optimizationLevel: 3,
+          }),
+          svgo(),
+          gifsicle(),
+        ]),
+      ),
+    )
     .pipe(dest(`${BuildPaths.IMG}`));
 };
 
@@ -217,9 +238,11 @@ export { _buildImg as buildImg };
 const buildWebp = () => {
   return src(SrcFiles.IMG_TO_WEBP, { base: `${SrcPaths.IMG}` })
     .pipe(gulpIf(!isProductionMode, plumber()))
-    .pipe(webp({
-      quality: 90
-    }))
+    .pipe(
+      webp({
+        quality: 90,
+      }),
+    )
     .pipe(dest(`${BuildPaths.IMG}`));
 };
 
@@ -230,20 +253,26 @@ export { _buildWebp as buildWebp };
 
 const buildSvgSprite = () => {
   return src(SrcFiles.SVG_TO_SPRITE)
-    .pipe(imagemin([
-      svgo({
-        plugins: [			{
-          name: 'cleanupIDs',
-          active: true
-        }]
-      })
-    ]))
-    .pipe(svgstore({
-      inlineSvg: true
-    }))
+    .pipe(
+      imagemin([
+        svgo({
+          plugins: [
+            {
+              name: 'cleanupIDs',
+              active: true,
+            },
+          ],
+        }),
+      ]),
+    )
+    .pipe(
+      svgstore({
+        inlineSvg: true,
+      }),
+    )
     .pipe(rename(SVG_SPRITE_FILENAME))
     .pipe(dest(`${BuildPaths.IMG}`));
-}
+};
 
 const _buildSvgSprite = series(buildSvgSprite);
 export { _buildSvgSprite as buildSvgSprite };
@@ -251,8 +280,7 @@ export { _buildSvgSprite as buildSvgSprite };
 // Fonts
 
 const buildFonts = () => {
-  return src(SrcFiles.FONTS)
-    .pipe(dest(`${BuildPaths.FONTS}`));
+  return src(SrcFiles.FONTS).pipe(dest(`${BuildPaths.FONTS}`));
 };
 
 const _buildFonts = series(buildFonts);
@@ -262,12 +290,17 @@ export { _buildFonts as buildFonts };
 
 const buildFavicon = () => {
   return src(SrcFiles.FAVICON)
-    .pipe(gulpIf(isProductionMode, imagemin([
-      optipng({
-        optimizationLevel: 3
-      }),
-      svgo()
-    ])))
+    .pipe(
+      gulpIf(
+        isProductionMode,
+        imagemin([
+          optipng({
+            optimizationLevel: 3,
+          }),
+          svgo(),
+        ]),
+      ),
+    )
     .pipe(dest(`${BuildPaths.FAVICON}`));
 };
 
@@ -285,50 +318,31 @@ const startServer = () => {
     ghostMode: {
       clicks: false,
       forms: false,
-      scroll: false
-    }
+      scroll: false,
+    },
   });
 
   // Watchers
 
   watch(
     [...SrcFiles.HTML, ...SrcFiles.SVG_TO_SPRITE],
-    series(buildSvgSprite, buildHtml, reloadPage)
+    series(buildSvgSprite, buildHtml, reloadPage),
   );
 
-  watch(
-    [...SrcFiles.SCSS, ...SrcFiles.SVG],
-    series(buildCss, reloadPage)
-  );
+  watch([...SrcFiles.SCSS, ...SrcFiles.SVG], series(buildCss, reloadPage));
 
-  watch(
-    SrcFiles.JS,
-    series(buildJs, reloadPage)
-  );
+  watch(SrcFiles.JS, series(buildJs, reloadPage));
 
-  watch(
-    SrcFiles.IMG,
-    series(buildImg, reloadPage)
-  );
+  watch(SrcFiles.IMG, series(buildImg, reloadPage));
 
-  watch(
-    SrcFiles.IMG_TO_WEBP,
-    series(buildWebp, reloadPage)
-  );
+  watch(SrcFiles.IMG_TO_WEBP, series(buildWebp, reloadPage));
 
-  watch(
-    SrcFiles.FONTS,
-    series(buildFonts, reloadPage)
-  );
+  watch(SrcFiles.FONTS, series(buildFonts, reloadPage));
 
-  watch(
-    SrcFiles.FAVICON,
-    series(buildFavicon, reloadPage)
-  );
+  watch(SrcFiles.FAVICON, series(buildFavicon, reloadPage));
 };
 
 // *********************************** TASKS ***********************************
-
 
 const builders = [
   series(buildSvgSprite, buildHtml),
@@ -337,11 +351,16 @@ const builders = [
   buildImg,
   buildWebp,
   buildFonts,
-  buildFavicon
+  buildFavicon,
 ];
 
 const buildDev = series(clearBuildFolder, parallel(...builders));
-const buildProd = series(enableProductionMode, clearBuildFolder, parallel(...builders), bustCache);
+const buildProd = series(
+  enableProductionMode,
+  clearBuildFolder,
+  parallel(...builders),
+  bustCache,
+);
 const startDev = series(buildDev, startServer);
 const deployGhPages = series(buildProd, publishGhPages);
 

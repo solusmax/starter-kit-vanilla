@@ -2,7 +2,7 @@
   "htmlWhitespaceSensitivity": "strict",
   "overrides": [
     {
-      "files": "*.{js,jsx,ts,tsx}",
+      "files": "*.{js,jsx,ts,tsx,mjs,cjs}",
       "options": {
         "bracketSameLine": false,
         "singleQuote": true,
