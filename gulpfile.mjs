@@ -33,7 +33,7 @@ const server = browserSync.create();
 const SRC_PATH = './src';
 const BUILD_PATH = './build';
 
-const SrcPaths = {
+const SrcPath = {
   HTML: `${SRC_PATH}/html`,
   SCSS: `${SRC_PATH}/scss`,
   JS: `${SRC_PATH}/js`,
@@ -42,22 +42,22 @@ const SrcPaths = {
   FAVICON: `${SRC_PATH}/favicon`,
 };
 
-const SCSS_ENTRY_POINT = `${SrcPaths.SCSS}/style.scss`;
-const JS_ENTRY_POINT = `./${SrcPaths.JS}/main.js`;
+const SCSS_ENTRY_POINT = `${SrcPath.SCSS}/style.scss`;
+const JS_ENTRY_POINT = `./${SrcPath.JS}/main.js`;
 
 const SrcFiles = {
-  HTML: [`${SrcPaths.HTML}/**/*.html`, `!${SrcPaths.HTML}/includes/**/*.html`],
-  SCSS: [`${SrcPaths.SCSS}/**/*.scss`],
-  JS: [`${SrcPaths.JS}/**/*.js`],
-  IMG: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png,gif,svg}`],
-  IMG_TO_WEBP: [`${SrcPaths.IMG}/**/*.{jpg,jpeg,png}`],
-  SVG: [`${SrcPaths.IMG}/**/*.svg`],
-  SVG_TO_SPRITE: [`${SrcPaths.IMG}/**/icon-*.svg`],
-  FONTS: [`${SrcPaths.FONTS}/**/*`],
-  FAVICON: [`${SrcPaths.FAVICON}/**/*`],
+  HTML: [`${SrcPath.HTML}/**/*.html`, `!${SrcPath.HTML}/includes/**/*.html`],
+  SCSS: [`${SrcPath.SCSS}/**/*.scss`],
+  JS: [`${SrcPath.JS}/**/*.js`],
+  IMG: [`${SrcPath.IMG}/**/*.{jpg,jpeg,png,gif,svg}`],
+  IMG_TO_WEBP: [`${SrcPath.IMG}/**/*.{jpg,jpeg,png}`],
+  SVG: [`${SrcPath.IMG}/**/*.svg`],
+  SVG_TO_SPRITE: [`${SrcPath.IMG}/**/icon-*.svg`],
+  FONTS: [`${SrcPath.FONTS}/**/*`],
+  FAVICON: [`${SrcPath.FAVICON}/**/*`],
 };
 
-const BuildPaths = {
+const BuildPath = {
   HTML: `${BUILD_PATH}`,
   CSS: `${BUILD_PATH}/css`,
   JS: `${BUILD_PATH}/js`,
@@ -97,16 +97,16 @@ const publishGhPages = (cb) => {
 const bustCache = () => {
   return src(
     [
-      `${BuildPaths.CSS}/${CSS_BUNDLE_FILENAME}`,
-      `${BuildPaths.JS}/${JS_BUNDLE_FILENAME}`,
+      `${BuildPath.CSS}/${CSS_BUNDLE_FILENAME}`,
+      `${BuildPath.JS}/${JS_BUNDLE_FILENAME}`,
     ],
     { base: BUILD_PATH },
   )
     .pipe(rev())
     .pipe(revDel())
-    .pipe(src(`${BuildPaths.HTML}/**/*.html`))
+    .pipe(src(`${BuildPath.HTML}/**/*.html`))
     .pipe(revRewrite())
-    .pipe(dest(BuildPaths.HTML));
+    .pipe(dest(BuildPath.HTML));
 };
 
 // ********************************* BUILDERS **********************************
@@ -129,7 +129,7 @@ const buildHtml = () => {
         removeComments: true,
       }),
     )
-    .pipe(dest(`${BuildPaths.HTML}`));
+    .pipe(dest(`${BuildPath.HTML}`));
 };
 
 const _buildHtml = series(buildHtml);
@@ -155,7 +155,7 @@ const buildCss = () => {
     )
     .pipe(gulpIf(isProductionMode, postcss([cssnano()])))
     .pipe(rename(CSS_BUNDLE_FILENAME))
-    .pipe(dest(`${BuildPaths.CSS}`, { sourcemaps: '.' }));
+    .pipe(dest(`${BuildPath.CSS}`, { sourcemaps: '.' }));
 };
 
 const _buildCss = series(buildCss);
@@ -198,7 +198,7 @@ const buildJs = () => {
         ),
       )
 
-      .pipe(dest(`${BuildPaths.JS}`, { sourcemaps: '.' }))
+      .pipe(dest(`${BuildPath.JS}`, { sourcemaps: '.' }))
   );
 };
 
@@ -208,9 +208,9 @@ export { _buildJs as buildJs };
 // Images
 
 const buildImg = () => {
-  return src(SrcFiles.IMG, { base: `${SrcPaths.IMG}` })
+  return src(SrcFiles.IMG, { base: `${SrcPath.IMG}` })
     .pipe(gulpIf(!isProductionMode, plumber()))
-    .pipe(gulpIf(!isProductionMode, newer(`${BuildPaths.IMG}`)))
+    .pipe(gulpIf(!isProductionMode, newer(`${BuildPath.IMG}`)))
     .pipe(
       gulpIf(
         isProductionMode,
@@ -227,7 +227,7 @@ const buildImg = () => {
         ]),
       ),
     )
-    .pipe(dest(`${BuildPaths.IMG}`));
+    .pipe(dest(`${BuildPath.IMG}`));
 };
 
 const _buildImg = series(buildImg);
@@ -236,14 +236,14 @@ export { _buildImg as buildImg };
 // WebP
 
 const buildWebp = () => {
-  return src(SrcFiles.IMG_TO_WEBP, { base: `${SrcPaths.IMG}` })
+  return src(SrcFiles.IMG_TO_WEBP, { base: `${SrcPath.IMG}` })
     .pipe(gulpIf(!isProductionMode, plumber()))
     .pipe(
       webp({
         quality: 90,
       }),
     )
-    .pipe(dest(`${BuildPaths.IMG}`));
+    .pipe(dest(`${BuildPath.IMG}`));
 };
 
 const _buildWebp = series(buildWebp);
@@ -271,7 +271,7 @@ const buildSvgSprite = () => {
       }),
     )
     .pipe(rename(SVG_SPRITE_FILENAME))
-    .pipe(dest(`${BuildPaths.IMG}`));
+    .pipe(dest(`${BuildPath.IMG}`));
 };
 
 const _buildSvgSprite = series(buildSvgSprite);
@@ -280,7 +280,7 @@ export { _buildSvgSprite as buildSvgSprite };
 // Fonts
 
 const buildFonts = () => {
-  return src(SrcFiles.FONTS).pipe(dest(`${BuildPaths.FONTS}`));
+  return src(SrcFiles.FONTS).pipe(dest(`${BuildPath.FONTS}`));
 };
 
 const _buildFonts = series(buildFonts);
@@ -301,7 +301,7 @@ const buildFavicon = () => {
         ]),
       ),
     )
-    .pipe(dest(`${BuildPaths.FAVICON}`));
+    .pipe(dest(`${BuildPath.FAVICON}`));
 };
 
 const _buildFavicon = series(buildFavicon);
